@@ -1,0 +1,49 @@
+version: '3'
+services:
+  datastore:
+    image: busybox
+    volumes:
+      - db_data:/var/lib/mysql
+      - bundle_install:/app/vendor/bundle
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+  app:
+    build:
+      context: .
+      dockerfile: ./docker/ruby/Dockerfile
+    tty: true
+    stdin_open: true
+    volumes:
+      - bundle_install:/app/vendor/bundle
+      - ./app:/app/app
+      - ./bin:/app/bin
+      - ./config:/app/config
+      - ./config.ru:/app/config.ru
+      - ./db:/app/db
+      - ./Gemfile:/app/Gemfile
+      - ./Gemfile.lock:/app/Gemfile.lock
+      - ./Guardfile:/app/Guardfile
+      - ./lib:/app/lib
+      - ./public:/app/public
+      - ./Rakefile:/app/Rakefile
+      - ./spec:/app/spec
+      - ./.rubocop.yml:/app/.rubocop.yml
+      - ./log:/app/log
+    ports:
+      - "3000:3000"
+    command: ["bundle", "exec", "pumactl", "start"]
+    depends_on:
+      - db
+    environment:
+      APP_DATABASE_USERNAME: root
+      APP_DATABASE_PASSWORD: pass
+      APP_DATABASE_HOST: db
+volumes:
+  db_data:
+  bundle_install:
