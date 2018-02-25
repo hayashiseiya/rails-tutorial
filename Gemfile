@@ -33,10 +33,14 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem "brakeman", require: false
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
+  gem "guard",                    "2.13.0"
+  gem "guard-minitest",           "2.4.4"
   gem "guard-rubocop"
+  gem "minitest-reporters", "1.1.14"
   gem "onkcop", require: false
   gem "pry-byebug"
   gem "pry-rails"
+  gem "rails-controller-testing", "1.0.2"
 end
 
 group :development do
@@ -50,3 +54,5 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+gem "bootstrap-sass"
